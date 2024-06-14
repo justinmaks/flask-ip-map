@@ -65,8 +65,9 @@ def index():
     db.commit()
 
     visits = query_db('SELECT latitude, longitude FROM visits')
+    unique_ips_count = query_db('SELECT COUNT(DISTINCT ip) FROM visits', one=True)[0]
 
-    return render_template('map.html', visits=visits)
+    return render_template('map.html', visits=visits, unique_ips_count=unique_ips_count)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
