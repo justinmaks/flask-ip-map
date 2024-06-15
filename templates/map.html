@@ -20,7 +20,8 @@
 
         var visits = {{ visits | tojson }};
         visits.forEach(function(visit) {
-            L.marker([visit[0], visit[1]]).addTo(map);
+            var marker = L.marker([visit[1], visit[2]]).addTo(map);
+            marker.bindPopup(`<b>IP Address:</b> ${visit[0]}<br><b>Location:</b> [${visit[1]}, ${visit[2]}]`);
         });
     </script>
 </body>

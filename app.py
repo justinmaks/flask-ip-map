@@ -64,7 +64,7 @@ def index():
     db.execute('INSERT INTO visits (ip, latitude, longitude) VALUES (?, ?, ?)', [ip, latitude, longitude])
     db.commit()
 
-    visits = query_db('SELECT latitude, longitude FROM visits')
+    visits = query_db('SELECT ip, latitude, longitude FROM visits')
     unique_ips_count = query_db('SELECT COUNT(DISTINCT ip) FROM visits', one=True)[0]
 
     return render_template('map.html', visits=visits, unique_ips_count=unique_ips_count)
