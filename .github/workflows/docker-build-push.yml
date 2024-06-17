@@ -8,15 +8,18 @@ on:
 jobs:
   create_release:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Get version from package file
-        id: version
+        id: get_version
         run: |
           VERSION=$(cat VERSION)  # Adjust this line to get your version
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "version=${VERSION}" >> $GITHUB_ENV
+          echo "::set-output name=version::${VERSION}"
 
       - name: Create Release
         id: create_release
@@ -24,8 +27,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.VERSION }}
-          release_name: Release ${{ env.VERSION }}
+          tag_name: ${{ steps.get_version.outputs.version }}
+          release_name: Release ${{ steps.get_version.outputs.version }}
           draft: false
           prerelease: false
 
@@ -56,4 +59,4 @@ jobs:
           push: true
           tags: |
             ${{ env.IMAGE_NAME }}:latest
-            ${{ env.IMAGE_NAME }}:${{ needs.create_release.outputs.tag_name }}
+            ${{ env.IMAGE_NAME }}:${{ needs.create_release.outputs.version }}
