@@ -1,21 +1,25 @@
 import sqlite3
 
-conn = sqlite3.connect('database.db')
-c = conn.cursor()
+DATABASE = 'database.db'
 
-# Check if the visits table exists
-c.execute('''
-    SELECT name FROM sqlite_master WHERE type='table' AND name='visits';
-''')
-
-table_exists = c.fetchone()
-
-# If the visits table does not exist, create it
-if not table_exists:
-    c.execute('''
-        CREATE TABLE visits
-        (id INTEGER PRIMARY KEY, ip TEXT, latitude REAL, longitude REAL)
+def init_db():
+    conn = sqlite3.connect(DATABASE)
+    cur = conn.cursor()
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS visits (
+            id INTEGER PRIMARY KEY,
+            ip TEXT NOT NULL,
+            latitude REAL NOT NULL,
+            longitude REAL NOT NULL,
+            city TEXT,
+            state TEXT,
+            country TEXT,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
     ''')
+    conn.commit()
+    conn.close()
 
-conn.commit()
-conn.close()
+if __name__ == '__main__':
+    init_db()
+    print("Database initialized.")
