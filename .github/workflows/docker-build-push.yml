@@ -60,3 +60,4 @@ jobs:
           tags: |
             ${{ env.IMAGE_NAME }}:latest
             ${{ env.IMAGE_NAME }}:${{ needs.create_release.outputs.version }}
+          
