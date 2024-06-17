@@ -46,6 +46,10 @@ def get_geo_data(ip):
     response.raise_for_status()  # Raise an HTTPError for bad responses
     return response.json()
 
+def get_country_statistics():
+    stats = query_db('SELECT country, COUNT(*) as count FROM visits GROUP BY country ORDER BY count DESC')
+    return stats
+
 @app.route('/')
 def index():
     ip = get_client_ip()
@@ -72,8 +76,9 @@ def index():
 
     visits = query_db('SELECT ip, latitude, longitude, city, state, country FROM visits')
     unique_ips_count = query_db('SELECT COUNT(DISTINCT ip) FROM visits', one=True)[0]
+    country_stats = get_country_statistics()
 
-    return render_template('map.html', visits=visits, unique_ips_count=unique_ips_count)
+    return render_template('map.html', visits=visits, unique_ips_count=unique_ips_count, country_stats=country_stats)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
