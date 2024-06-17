@@ -53,18 +53,24 @@ def index():
         geo_data = get_geo_data(ip)
         app.logger.info(f"Geo data: {geo_data}")
         latitude, longitude = map(float, geo_data['loc'].split(','))
+        city = geo_data.get('city', 'Unknown')
+        state = geo_data.get('region', 'Unknown')
+        country = geo_data.get('country', 'Unknown')
     except KeyError:
         app.logger.error(f"Geo data for IP {ip} does not contain 'loc' key: {geo_data}")
         latitude, longitude = 0.0, 0.0  # Default values or handle as needed
+        city = state = country = 'Unknown'
     except requests.RequestException as e:
         app.logger.error(f"RequestException for IP {ip}: {e}")
         latitude, longitude = 0.0, 0.0  # Default values or handle as needed
+        city = state = country = 'Unknown'
 
     db = get_db()
-    db.execute('INSERT INTO visits (ip, latitude, longitude) VALUES (?, ?, ?)', [ip, latitude, longitude])
+    db.execute('INSERT INTO visits (ip, latitude, longitude, city, state, country) VALUES (?, ?, ?, ?, ?, ?)',
+               [ip, latitude, longitude, city, state, country])
     db.commit()
 
-    visits = query_db('SELECT ip, latitude, longitude FROM visits')
+    visits = query_db('SELECT ip, latitude, longitude, city, state, country FROM visits')
     unique_ips_count = query_db('SELECT COUNT(DISTINCT ip) FROM visits', one=True)[0]
 
     return render_template('map.html', visits=visits, unique_ips_count=unique_ips_count)
