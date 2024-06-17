@@ -47,7 +47,7 @@ def get_geo_data(ip):
     return response.json()
 
 def get_country_statistics():
-    stats = query_db('SELECT country, COUNT(*) as count FROM visits GROUP BY country ORDER BY count DESC')
+    stats = query_db('SELECT country, COUNT(DISTINCT ip) as count FROM visits GROUP BY country ORDER BY count DESC')
     return stats
 
 @app.route('/')
