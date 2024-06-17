@@ -15,7 +15,7 @@ jobs:
     - name: Get version from package file
       id: version
       run: |
-        VERSION=$(cat VERSION.txt)  # Adjust this line to get your version
+        VERSION=$(cat VERSION)  # Adjust this line to get your version
         echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
     - name: Create Release
