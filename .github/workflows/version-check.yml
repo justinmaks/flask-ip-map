@@ -40,9 +40,9 @@ jobs:
           current_version = os.getenv('CURRENT_VERSION')
           previous_version = os.getenv('PREVIOUS_VERSION')
 
-          if not semver.VersionInfo.isvalid(current_version):
+          if not semver.VersionInfo.is_valid(current_version):
               raise ValueError(f'Invalid current version: {current_version}')
-          if not semver.VersionInfo.isvalid(previous_version):
+          if not semver.VersionInfo.is_valid(previous_version):
               raise ValueError(f'Invalid previous version: {previous_version}')
 
           current_version_info = semver.VersionInfo.parse(current_version)
