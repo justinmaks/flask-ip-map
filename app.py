@@ -3,6 +3,7 @@ import sqlite3
 import requests
 import os
 import logging
+import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 
@@ -50,6 +51,26 @@ def get_country_statistics():
     stats = query_db('SELECT country, COUNT(DISTINCT ip) as count FROM visits GROUP BY country ORDER BY count DESC')
     return stats
 
+def generate_country_chart(stats):
+    countries = [stat[0] for stat in stats]
+    counts = [stat[1] for stat in stats]
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(countries, counts, color='skyblue')
+    plt.xlabel('Country')
+    plt.ylabel('Number of Visitors')
+    plt.title('Number of Visitors by Country')
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    
+    if not os.path.exists('static'):
+        os.makedirs('static')
+    
+    chart_path = os.path.join('static', 'country_chart.png')
+    plt.savefig(chart_path)
+    plt.close()
+    return chart_path
+
 @app.route('/')
 def index():
     ip = get_client_ip()
@@ -77,8 +98,9 @@ def index():
     visits = query_db('SELECT ip, latitude, longitude, city, state, country FROM visits')
     unique_ips_count = query_db('SELECT COUNT(DISTINCT ip) FROM visits', one=True)[0]
     country_stats = get_country_statistics()
+    chart_path = generate_country_chart(country_stats)
 
-    return render_template('map.html', visits=visits, unique_ips_count=unique_ips_count, country_stats=country_stats)
+    return render_template('map.html', visits=visits, unique_ips_count=unique_ips_count, country_stats=country_stats, chart_path=chart_path)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Stin Visitor Map</title>
+    <title> Stin's Visitor Map</title>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
     <style>
@@ -23,20 +23,6 @@
             color: #bdc3c7;
         }
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        li {
-            background: #34495e;
-            margin: 5px 0; /* Reduced margin */
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-        }
-
         #map {
             height: 600px;
             margin: 20px auto;
@@ -54,23 +40,34 @@
         .stats {
             margin: 20px auto;
             max-width: 600px;
-            background: #34495e;  /* Ensure this matches the other elements */
+            background: #34495e;
             padding: 20px;
+            border-radius: 10px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
             border-radius: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Visitor Map</h1>
+        <h1>Stin's Visitor Map</h1>
         <p>Total unique IPs: {{ unique_ips_count }}</p>
         <div class="stats">
             <h2>Visitors by Country</h2>
-            <ul>
-                {% for country in country_stats %}
-                    <li>{{ country[0] }}: {{ country[1] }}</li>
-                {% endfor %}
-            </ul>
+            <div class="chart-container">
+                <img src="{{ url_for('static', filename='country_chart.png') }}" alt="Country Chart">
+            </div>
         </div>
         <div id="map"></div>
     </div>
