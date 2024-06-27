@@ -1,5 +1,8 @@
 # Flask IP Map
 
+## @TODO
+[] Change logic to not allow loading into visits var in map.html. visible from curl. populates in html when it should just dynamically pull
+
 devmaks.biz
 
 env var:
