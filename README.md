@@ -1,5 +1,8 @@
 # Flask IP Map
 
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/justinmaks/flask-ip-map/docker-build-push.yml)
+
+
 ## @TODO
 [] Change logic to not allow loading into visits var in map.html. visible from curl. populates in html when it should just dynamically pull
 
